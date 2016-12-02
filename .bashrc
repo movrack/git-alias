@@ -10,59 +10,120 @@ alias lg3="git log --graph --abbrev-commit --decorate --format=format:'%C(bold b
 
 #git_savePush [commit message]
 function git_savePush() {
-    git add .
-    git commit -a -m "$1"
-    git push
+
+	if [ -z "$1" ]
+	then
+		echo "You have to give a commit message."
+	else
+		git add .
+    	git commit -a -m "$1"
+    	git push
+	fi
+
 }
 
 #git_update  [branch name]
 #or 'git pull' looks faster on my PC
 #https://www.derekgourlay.com/blog/git-when-to-merge-vs-when-to-rebase/
 function git_update() {
-	git fetch origin
-	git rebase -p origin/$1
+
+	if [ -z "$1" ]
+	then
+		echo "You have the branch name (current) to update."
+	else
+		git fetch origin
+		git rebase -p origin/$1
+	fi
+
 }
 
 #git_changeBranch [branch name]
 function git_changeBranch() {
-	git checkout $1
+
+	if [ -z "$1" ]
+	then
+		echo "You have to give the branc name where we should switch."
+	else
+		git checkout $1
+	fi
+	
 }
 
 #git_createBranch [new branch name] [from branch]
 function git_createBranch() {
-	git checkout -b $1 $2
+	if [ -z "$1" ]
+	then
+		echo "You have to give the new bracnh name."
+	else
+		git checkout -b $1 $2
+	fi
 }
 
 
 #git_closeFeatureBranch [cloned branch name]
 function git_closeFeatureBranch_develop() {
-	git pull origin develop
-	git checkout develop 
-	if git merge $1
+
+	if [ -z "$1" ]
 	then
-		git push
-		git branch -d $1
+		echo "You have to give the cloned (current) bracnh name."
+	else
+		git pull origin develop
+		git checkout develop 
+		if git merge $1
+		then
+			git push
+			git branch -d $1
+		fi
 	fi
+	
 }
 
-#git_releaseBranch_master [issue/release branch name] [annotate] [tag name]
+#git_releaseBranch_master [release branch name] [annotate] [tag name]
 #e.g. "release-0.1"  0.1  "Initial public release"
 function git_releaseBranch_master() {
 
-	git checkout master
-	git merge $1
-	git push
 
-	git tag -a $2 -m "$3" master
-	git push --tags
-
-	git checkout develop
-	git merge $1
-	git push
-
-	if git merge $1
+	if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ];
 	then
-		git branch -d $1
+		echo "You have to give the release branch name, the tag id and the tag name."
+	else
+		git checkout master
+		git merge $1
+		git push
+
+		git tag -a $2 -m "$3" master
+		git push --tags
+
+		git checkout develop
+		git merge $1
+		git push
+
+		if git merge $1
+		then
+			git branch -d $1
+		fi
+	fi
+
+}
+
+#git_releaseBranch_master [issue branch name] 
+function git_hotFix_master() {
+	if [ -z "$1" ]
+	then
+		echo "You have to give the issue bracnh name."
+	else
+		git checkout master
+		git merge $1
+		git push
+
+		git checkout develop
+		git merge $1
+		git push
+
+		if git merge $1
+		then
+			git branch -d $1
+		fi
 	fi
 }
 
