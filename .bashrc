@@ -42,7 +42,7 @@ function git_changeBranch() {
 
 	if [ -z "$1" ]
 	then
-		echo "You have to give the branc name where we should switch."
+		echo "You have to give the branch name where we should switch."
 	else
 		git checkout $1
 	fi
@@ -53,7 +53,7 @@ function git_changeBranch() {
 function git_createBranch() {
 	if [ -z "$1" ]
 	then
-		echo "You have to give the new bracnh name."
+		echo "You have to give the new branch name."
 	else
 		git checkout -b $1 $2
 	fi
@@ -65,7 +65,7 @@ function git_closeFeatureBranch_develop() {
 
 	if [ -z "$1" ]
 	then
-		echo "You have to give the cloned (current) bracnh name."
+		echo "You have to give the cloned (current) branch name."
 	else
 		git pull origin develop
 		git checkout develop 
@@ -110,7 +110,7 @@ function git_releaseBranch_master() {
 function git_hotFix_master() {
 	if [ -z "$1" ]
 	then
-		echo "You have to give the issue bracnh name."
+		echo "You have to give the issue branch name."
 	else
 		git checkout master
 		git merge $1
